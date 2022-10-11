@@ -14,7 +14,7 @@ Auth = auth.Authentication()
 def get_internalId_from_externalId(type,id):
     logger.info('Checking if external ID exists')
     try:
-        url = f'{Auth.tenant}/inventory/managedObjects?childAdditionId=3003&childAssetId=200&childDeviceId=2001&currentPage=3&fragmentType=c8y_IsDevice&ids=200,300&onlyRoots=true&owner=manga&pageSize=10&q=$filter=(owner+eq+'manga')&query=$filter=(owner+eq+'manga')&skipChildrenNames=true&text=my_value&type=c8y_DeviceGroup&withChildren=false&withChildrenCount=true&withGroups=true&withParents=true&withTotalElements=true&withTotalPages=true'
+        url = f'{Auth.tenant}/inventory/managedObjects?childAdditionId=3003&childAssetId=200&childDeviceId=2001&currentPage=3&fragmentType=c8y_IsDevice&ids=200,300&onlyRoots=true&owner=manga&pageSize=10&skipChildrenNames=true&text=my_value&type=c8y_DeviceGroup&withChildren=false&withChildrenCount=true&withGroups=true&withParents=true&withTotalElements=true&withTotalPages=true'
         response = requests.request("GET", url, headers=Auth.headers)
         logger.debug('Response from request: ' + str(response.text))
         logger.debug('Response from request with code : ' + str(response.status_code))
