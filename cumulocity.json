@@ -17,10 +17,15 @@
                        },
   "requiredRoles": [
     "ROLE_INVENTORY_ADMIN",
+    "ROLE_INVENTORY_READ",
     "ROLE_IDENTITY_ADMIN",
+    "ROLE_IDENTITY_READ",
     "ROLE_MEASUREMENT_ADMIN",
+    "ROLE_MEASUREMENT_READ",
     "ROLE_EVENT_ADMIN",
-    "ROLE_ALARM_ADMIN"
+    "ROLE_EVENT_READ",
+    "ROLE_ALARM_ADMIN",
+    "ROLE_ALARM_READ"
   ],
   "roles": [],
   "livenessProbe": {

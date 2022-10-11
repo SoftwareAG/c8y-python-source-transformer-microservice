@@ -1,4 +1,5 @@
 import logging
+import re
 logger = logging.getLogger(__name__)
 logger.info('Logger for Inventory was initialised')
 
@@ -13,9 +14,14 @@ Auth = auth.Authentication()
 def get_internalId_from_externalId(type,id):
     logger.info('Checking if external ID exists')
     try:
-        url = f'{Auth.tenant}/identity/externalIds/{type}/{id}'
+        url = f'{Auth.tenant}/inventory/managedObjects?childAdditionId=3003&childAssetId=200&childDeviceId=2001&currentPage=3&fragmentType=c8y_IsDevice&ids=200,300&onlyRoots=true&owner=manga&pageSize=10&q=$filter=(owner+eq+'manga')&query=$filter=(owner+eq+'manga')&skipChildrenNames=true&text=my_value&type=c8y_DeviceGroup&withChildren=false&withChildrenCount=true&withGroups=true&withParents=true&withTotalElements=true&withTotalPages=true'
         response = requests.request("GET", url, headers=Auth.headers)
+        logger.debug('Response from request: ' + str(response.text))
+        logger.debug('Response from request with code : ' + str(response.status_code))
+        logger.debug("Now identity")
+        url = f'{Auth.tenant}/identity/externalIds/{type}/{id}'    
         logger.debug('Sending data to the following url: ' + str(url))
+        response = requests.request("GET", url, headers=Auth.headers)
         logger.debug('Response from request: ' + str(response.text))
         logger.debug('Response from request with code : ' + str(response.status_code))
         if response.status_code == 200 or response.status_code == 201:
