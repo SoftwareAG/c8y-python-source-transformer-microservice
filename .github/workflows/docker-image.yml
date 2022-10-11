@@ -1,0 +1,42 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Installing dependencies
+      run: sudo apt-get install -y zip unzip wget curl gnupg2 apt-transport-https
+    - name: Get c8y
+      run: curl https://reubenmiller.github.io/go-c8y-cli-repo/debian/PUBLIC.KEY | gpg --dearmor | sudo tee /usr/share/keyrings/go-c8y-cli-archive-keyring.gpg >/dev/null
+    - name: Add keys
+      run: sudo sh -c "echo 'deb [signed-by=/usr/share/keyrings/go-c8y-cli-archive-keyring.gpg] http://reubenmiller.github.io/go-c8y-cli-repo/debian stable main' >> /etc/apt/sources.list"
+    - name: Apt update
+      run: sudo apt-get update
+    - name: Install c8y
+      run: sudo apt-get install go-c8y-cli
+    - shell: bash
+      env:
+        C8Y_HOST: ${{ secrets.C8Y_HOST }}
+        C8Y_PW: ${{ secrets.C8Y_PW }}
+        C8Y_USER: ${{ secrets.C8Y_USER }}
+      run: c8y sessions create --type dev --host "https://${C8Y_HOST}" --username "${C8Y_USER}" --password "${C8Y_PW}" --name actions
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag source-transformer
+    - name: Saving Container
+      run: docker save source-transformer > "image.tar"
+    - name: Zipping the container with the cumulocity manifest
+      run: zip source-transformer.zip cumulocity.json image.tar
+    - name: Uploading Microservice 
+      run: |
+        eval $(c8y sessions set --shell bash --session /home/runner/.cumulocity/actions.json)
+        c8y microservices create --file source-transformer.zip
