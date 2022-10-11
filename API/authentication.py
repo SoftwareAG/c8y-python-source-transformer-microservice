@@ -22,7 +22,6 @@ logger.debug(f'C8Y_BOOTSTRAP_PASSWORD: {C8Y_BOOTSTRAP_PASSWORD}')
 
 class Authentication(object):
 
-
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.logger.debug('Logger for authentication was initialised')
@@ -47,7 +46,7 @@ class Authentication(object):
     def base64_credentials(self, tenant, user, password):
         str_credentials = tenant + "/" + user + ":" + password
         self.logger.debug(f'Returning {str_credentials}, which equals in base64: {base64.b64encode(str_credentials.encode()).decode()}')
-        return 'Basic ' + base64.b64encode(str_credentials.encode()).decode()
+        return base64.b64encode(str_credentials.encode()).decode()
 
 
     def get_subscriber_for(self, tenant_id):
