@@ -46,7 +46,7 @@ class Authentication(object):
     def base64_credentials(self, tenant, user, password):
         str_credentials = tenant + "/" + user + ":" + password
         self.logger.debug(f'Returning {str_credentials}, which equals in base64: {base64.b64encode(str_credentials.encode()).decode()}')
-        return 'Basic ' + base64.b64encode(str_credentials.encode()).decode()
+        return f'Basic {base64.b64encode(str_credentials.encode()).decode()}'
 
 
     def get_subscriber_for(self, tenant_id):
