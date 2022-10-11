@@ -20,8 +20,6 @@ def create_measurement(payload):
         logger.debug(f'Received the following payload for sending: {payload}')
         url = "%s/measurement/measurements"%(Auth.tenant)
         Auth.headers['Accept'] = 'application/vnd.com.nsn.cumulocity.measurement+json'
-        for i in Auth.headers:
-            logger.debug(f'Header infos at position {i} contains: {Auth.headers[i]}')
         logger.debug('Sending data to the following url: ' + str(url))            
         response = requests.request("POST", url, headers=Auth.headers, data = json.dumps(payload))
         logger.debug('Response from request: ' + str(response.text))

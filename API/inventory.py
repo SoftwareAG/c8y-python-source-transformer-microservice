@@ -14,8 +14,6 @@ def get_internalId_from_externalId(type,id):
     logger.info('Checking if external ID exists')
     try:
         url = f'{Auth.tenant}/identity/externalIds/{type}/{id}'
-        for i in Auth.headers:
-            logger.debug(f'Header infos at position {i} contains: {Auth.headers[i]}')
         response = requests.request("GET", url, headers=Auth.headers)
         logger.debug('Sending data to the following url: ' + str(url))
         logger.debug('Response from request: ' + str(response.text))
