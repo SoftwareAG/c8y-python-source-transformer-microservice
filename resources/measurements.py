@@ -22,6 +22,7 @@ class Measurements(BaseRequest):
     def post(self):
         try:
             payload = super().post()
+            print(type(payload))
             statusCode,responseText = create_measurement(payload)
             make_response(jsonify({"message": str(responseText)}),statusCode)
         except Exception as e:
