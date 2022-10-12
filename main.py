@@ -10,7 +10,7 @@ from flask_restful import Api
 import os
 import sys
 import json
-
+import pyfiglet
 from resources.events import Events
 from resources.alarms import Alarms
 from resources.measurements import Measurements 
@@ -31,6 +31,13 @@ logger.debug('Events resources added')
 logger.debug('Adding Alarms resources')
 api.add_resource(Alarms, '/alarm/alarms')
 logger.debug('Alarms resources added')
+
+def print_banner():
+    logger.info(pyfiglet.figlet_format("Mutlitenant Decoder"))
+    logger.info("Author:\t\tMurat Bayram")
+    logger.info("Date:\t\t19th Sept. 2022")
+    logger.info("Description:\tA service that transforms the source to the internalId while given the externalId via arguements.")
+    logger.info("Documentation:\tPlease refer to the c8y-documentation wiki to find service description")
 
 
 # Verify the status of the microservice
@@ -53,4 +60,5 @@ def environment():
 
 if __name__ == '__main__':
     logger.info("Starting")
+    print_banner()
     app.run(host='0.0.0.0', port=80)
