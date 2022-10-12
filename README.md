@@ -1,125 +1,75 @@
-# PLEASE REPLACE THE PART BELOW WITH YOUR OWN CONTENT !!!
-
----
-
-# Template for Cumulocity IoT OS Repos
-
-This is a template repo for Cumulocity-IoT related open-source repos at SoftwareAG Organization. It contains basic guidelines for
- - Naming the Repo
- - FOSS Licensing
- - Topics
- - README.md structure
- - GitHub Setting
-
-## How to use this template
-
-Click here [Use this template](https://github.com/SoftwareAG/cumulocity-iot-template/generate) to create a new repo based on this template.
-
-## Naming the Repo
-
-* Use lower case names. Combine words with a "-". Avoid using camelCase or other separators.
-* Follow the pattern: **[productname]-[reponame]-[productfeature]**.
-* Examples for good repo names: "cumulocity-kpi-trend-widget", "cumulocity-hono-microservice"
-* Examples for bad repo names: "C8YPythonAgent", "EPLApps_Samples"
+# cumulocity-source-transformer-microservice
 
 
-Please make sure that you add a meaningful description to your repo.
+This project is an microservice that allows sending measurements, events and alarms to the Cumulocity API´s while not knowing the internalID. Therefore an own service endpoint is opened that requires the externalId and the externalId type in the POST request. The Event/Alarm/Measurement is thus transformed with the microservice and handed over to the real Cumulocity API.
 
-## FOSS Licensing & Copyright
+# Content
+- [cumulocity-source-transformer-microservice](#cumulocity-source-transformer-microservice)
+- [Content](#content)
+- [Quick Start](#quick-start)
+- [How to use](#how-to-use)
+- [Solution components](#solution-components)
+- [Installation from scratch](#installation-from-scratch)
 
-### License
-We strongly suggest that you use the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0).
-If you use this repo as a template the license will be automatically applied to your repo.
+# Quick Start
+Use the provided zip here in the release and upload it as microservice.
 
-If you don't use this template you should select the Apache License on repo creation:
+![Upload](/resources/upload.png)
 
-![img_2.png](img_2.png)
+# How to use
 
-If you use open-source 3rd Party Software please check the [license compatibility](https://joinup.ec.europa.eu/collection/eupl/solution/joinup-licensing-assistant/jla-compatibility-checker) 
+Measurements, Alarms or Events can be send while adding "type" and "externalId as parameter to the POST request.
+The API endpoint is opened on /service/{service-name}/(event/events,alarm/alarms,measurement/measurements) and adds the interalId to the payload before handing the payload to the Cumulocity API.
+Please be aware that due to that intermediate service no further inventory role filtering takes place anymore. A device that can reach that service endpoint can write to any device.
 
-### Copyright Header
+```bash
+curl --location 
+--request POST '{C8Y_URL}/service/source-transformer/measurement/measurements?type=c8y_Serial&externalId=mbay-test' \
+--data-raw '{
+  "time": "2022-10-12T12:03:27.845Z",
+  "type": "c8y_TemperatureMeasurement",
+  "c8y_Steam": {
+    "Temperature": {
+      "unit": "C",
+      "value": 100
+    }
+  }
+}'
+```
 
-Each file that contains code from yourself should contain a copyright header in the following format:
-````
-Copyright (c) 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA,
-and/or its subsidiaries and/or its affiliates and/or their licensors.
+# Solution components
 
-SPDX-License-Identifier: Apache-2.0
+The microservice consists of 4 modules and a main runtime:
+* `main.py`: Main runtime that opens an health endpoint at /health and also creates the rest endpoints
+* `API/authentication.py`: Contains the Authentication class that requests the service user via the bootstrap user from within the microservice environment. See [documentation](https://cumulocity.com/guides/microservice-sdk/concept/#microservice-bootstrap) for more details.
+* `API/inventory.py`: Consists of the logic to deliver the internalId of the device from the externalId and the externalId type.
+* `API/measurments.py`: Creates the measurement from the payload and sends it to Cumulocity.
+* `API/events.py`: Creates the events from the payload and sends it to Cumulocity.
+* `API/alarms.py`: Creates the alarm from the payload and sends it to Cumulocity.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+* `resources/base.py`: Is the base class of the request within the service microservice. It contains the main logic on extracting the externalId and the externalId type from the POST request. It also queries the internalId while calling `API/inventory.py` and replaces the {"source": {"id": "internalID"} } within the json body of the POST request. The base class is used from the specialized classes that handles logic of the endpoints etc.
+* `resources/alarms.py`: Is called when the alarms endpoint is calles on the service microservices and hand the payload over to 'API/alarms.py'.
+* `resources/events.py`: Is called when the events endpoint is calles on the service microservices and hand the payload over to 'API/events.py'.
+* `resources/measurements.py`: Is called when the measurements endpoint is calles on the service microservices and hand the payload over to 'API/measurements.py'.
 
-     http://www.apache.org/licenses/LICENSE-2.0
+Currently the sheduled request for statistics is set to be 900s which equals 15 minutes. Debug Level is set to be INFO. Feel free to adjust the resolution but keep in mind that a device is created for every subtenant as well as a certain device class is associated with that.
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+# Installation from scratch
 
-````
+To build the microservice run:
+```
+docker buildx build --platform linux/amd64 -t {NAMEOFSERVICE} .
+docker save {NAMEOFSERVICE} > image.tar
+zip {NAMEOFSERVICE} cumulocity.json image.tar
+```
 
-## Topics
+You can upload the microservice via the UI or via [go-c8y-cli](https://github.com/reubenmiller/go-c8y-cli)
 
-For Cumulocity IoT content please add the topics
 
-* cumulocity-iot
-* iot-analytics
-
-Also add one or multiple topics of the following categories:
-* 'agent' or 'cumulocity-agent'
-* 'webapp' or 'cumulocity-webapp'
-* 'widget' or 'cumulocity-widget'
-* 'client' or 'cumulocity-client'
-* 'cli' or 'cumulocity-cli'
-* 'microservice' or 'cumulocity-microservice'
-* 'example' or 'cumulocity-example'
-* 'tutorial' or 'cumulocity-tutorial'
-* 'simulator' or 'cumulocity-simulator'
-* 'extension' or 'cumulocity-extension'
-* 'documentation' or 'cumulocity-documentation'
-
-Beside that you should add additional topics like 'iot' or others matchen the content of your repo.
-
-## README structure
-
-The README.md should be structured in the following way:
-
-1. Overview about the Repo / Component
-2. Installation
-3. Run / Quick Start
-4. Build
-5. (opt) Release Notes
-6. (opt) Contributing Guidelines (either part of the README or in a separate CONTRIBUTING.md)
-7. Footer to TechCommunity
-
-Please always add the following footer to your README.md
-
----
+------------------------------
 
 These tools are provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
+_____________________
+For more information you can Ask a Question in the [TECHcommunity Forums](http://tech.forums.softwareag.com/techjforum/forums/list.page?product=cumulocity).
 
-For more information you can Ask a Question in the [TECH Community Forums](https://tech.forums.softwareag.com/tag/Cumulocity-IoT).
-
-Contact us at [TECHcommunity](mailto:Communities@softwareag.com?subject=Github/SoftwareAG) if you have any questions.
-
----
-
-##Github Settings
-
-There are multiple settings you can make use of in your repository.
-First of all we suggest to enable the Code Security and analysis functionality which includes a [Dependency graph](https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph), [Dependabot alerts](https://docs.github.com/en/code-security/dependabot/dependabot-alerts/about-dependabot-alerts) and [Dependabot security updates](https://docs.github.com/en/code-security/dependabot/dependabot-security-updates/about-dependabot-security-updates).
-
-![img.png](img.png)
-
-# Questions about this template
-
-If you have any questions or suggestions regarding this template please create an [issue](https://github.com/SoftwareAG/cumulocity-iot-template/issues/new)
-
----
-# PLEASE REPLACE THE PART ABOVE WITH YOUR OWN CONTENT !!!
-
-
-
-
+You can find additional information in the [Software AG TECHcommunity](http://techcommunity.softwareag.com/home/-/product/name/cumulocity).
