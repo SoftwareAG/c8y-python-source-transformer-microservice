@@ -38,7 +38,7 @@ class BaseRequest(Resource):
             self.logger.debug("Creating the json string to validate with cache.")
             self.cache_key = str({"id": self.id, "type": self.type})
             self.logger.debug(f'The json string for cache looks: {self.cache_key}.')
-            if cache.get(self.cache_key) not None:
+            if cache.get(self.cache_key):
                 self.logger.debug("Cache does contain the internal id already.")
                 self.source = cache.get(self.cache_key)
                 self.logger.debug(f'The internal id from cache is: {self.source}')
