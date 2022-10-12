@@ -29,7 +29,7 @@ class Events(BaseRequest):
                 self.logger.debug(f'The following payload is used to create the c8y event: {self.payload}')
                 self.statusCode,self.responseText = create_event(self.payload)
                 self.logger.debug(f'Received status code {self.statusCode} and text {self.responseText}.')
-                return make_response(jsonify({str(self.responseText)}),self.statusCode)
+                return make_response(jsonify({"message": str(self.responseText)}),self.statusCode)
         except Exception as e:
                 self.logger.error(f'Received the following error: {e}. Can not proceed, returning error message and status_code 500.')
-                return make_response(jsonify({str(e)}),500)
+                return make_response(jsonify({"message": str(e)}),500)
