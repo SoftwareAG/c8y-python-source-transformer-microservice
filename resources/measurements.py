@@ -21,13 +21,17 @@ class Measurements(BaseRequest):
 
     def post(self):
         try:
-            payload = super().post()
-            self.logger.debug(type(payload))
-            if type(payload) == 'Response':
-                return payload
+            self.payload = super().post()
+            self.logger.debug(type(self.payload))
+            self.logger.debug("Checking if payload is not a Response.")
+            if type(self.payload) == 'flask.wrappers.Response':
+                self.logger.debug("Payload from base class is a Response object, returning reponse object direct.")
+                return self.payload
             else:
-                statusCode,responseText = create_measurement(payload)
-                make_response(jsonify({"message": str(responseText)}),statusCode)
+                self.logger.debug(f'Tge following payload is used to create the c8y measurment: {self.payload}')
+                self.statusCode,self.responseText = create_measurement(self.payload)
+                self.logger.debug(f'Received status code {self.statusCode} and text {self.responseText}.')
+                make_response(jsonify({"message": str(self.responseText)}),self.statusCode)
         except Exception as e:
                 self.logger.error(f'Received the following error: {e}. Can not proceed, returning error message and status_code 500.')
                 return make_response(jsonify({"message": str(e)}),500)
