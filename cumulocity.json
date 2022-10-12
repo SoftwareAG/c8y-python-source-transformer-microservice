@@ -4,7 +4,7 @@
   "provider": {
     "name": "Cumulocity"
   },
-  "isolation": "SINGLE",
+  "isolation": "PER_TENANT",
   "scale": "AUTO",
   "replicas": 1,
   "resources": {
