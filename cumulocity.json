@@ -33,6 +33,6 @@
         "path": "/health"
     },
     "initialDelaySeconds": 60,
-    "periodSeconds": 60
+    "periodSeconds": 600
 }
 }

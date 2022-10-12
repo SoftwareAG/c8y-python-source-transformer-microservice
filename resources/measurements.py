@@ -23,7 +23,7 @@ class Measurements(BaseRequest):
             self.payload = super().post()
             self.logger.debug("Checking if payload is not a Response.")
             try:
-                self. status_code = self.payload.status_code
+                self.status_code = self.payload.status_code
                 self.logger.debug("Payload from base class is a Response object, returning reponse object direct.")
                 return self.payload
             except:
@@ -31,7 +31,7 @@ class Measurements(BaseRequest):
                 self.logger.debug(f'The following payload is used to create the c8y measurment: {self.payload}')
                 self.statusCode,self.responseText = create_measurement(self.payload)
                 self.logger.debug(f'Received status code {self.statusCode} and text {self.responseText}.')
-                make_response(jsonify({"message": str(self.responseText)}),self.statusCode)
+                return make_response(jsonify({"message": str(self.responseText)}),self.statusCode)
         except Exception as e:
                 self.logger.error(f'Received the following error: {e}. Can not proceed, returning error message and status_code 500.')
                 return make_response(jsonify({"message": str(e)}),500)
