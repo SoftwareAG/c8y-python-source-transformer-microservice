@@ -12,7 +12,7 @@ from flask import abort, current_app, jsonify, request, make_response
 Auth = auth.Authentication()
 
 def get_internalId_from_externalId(type,id):
-    logger.info('Checking if external ID exists')
+    logger.debug('Checking if external ID exists')
     try:
         url = f'{Auth.tenant}/identity/externalIds/{type}/{id}'    
         logger.debug('Sending data to the following url: ' + str(url))

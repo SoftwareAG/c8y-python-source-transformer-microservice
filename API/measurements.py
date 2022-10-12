@@ -26,7 +26,7 @@ def create_measurement(payload):
         logger.debug('Response from request: ' + str(response.text))
         logger.debug('Response from request with code : ' + str(response.status_code))
         if response.status_code == 200 or 201:
-            logger.info('Measurment send')
+            logger.debug('Measurment send')
         else:
             logger.warning('Response from request: ' + str(response.text))
             logger.warning('Got response with status_code: ' +
