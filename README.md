@@ -14,7 +14,7 @@ This project is an microservice that allows sending measurements, events and ala
 # Quick Start
 Use the provided zip here in the release and upload it as microservice.
 
-![Upload](/resources/upload.png)
+![Upload](/pics/upload.png)
 
 # How to use
 
