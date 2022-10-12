@@ -33,9 +33,9 @@ api.add_resource(Alarms, '/alarm/alarms')
 logger.debug('Alarms resources added')
 
 def print_banner():
-    logger.info(pyfiglet.figlet_format("Mutlitenant Decoder"))
+    logger.info(pyfiglet.figlet_format("Source Transformator"))
     logger.info("Author:\t\tMurat Bayram")
-    logger.info("Date:\t\t19th Sept. 2022")
+    logger.info("Date:\t\t12th October 2022")
     logger.info("Description:\tA service that transforms the source to the internalId while given the externalId via arguements.")
     logger.info("Documentation:\tPlease refer to the c8y-documentation wiki to find service description")
 
