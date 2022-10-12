@@ -22,12 +22,12 @@ class Measurements(BaseRequest):
     def post(self):
         try:
             self.payload = super().post()
-            self.logger.debug(type(self.payload))
             self.logger.debug("Checking if payload is not a Response.")
-            if self.payload.status_code:
+            try:
+                self. status_code = self.payload.status_code
                 self.logger.debug("Payload from base class is a Response object, returning reponse object direct.")
                 return self.payload
-            else:
+            except:
                 self.logger.debug("Payload is not a response object.")
                 self.logger.debug(f'The following payload is used to create the c8y measurment: {self.payload}')
                 self.statusCode,self.responseText = create_measurement(self.payload)

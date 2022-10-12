@@ -25,9 +25,6 @@ def get_internalId_from_externalId(type,id):
             internal_id = json.loads(response.text)['managedObject']['id']
             logger.debug(f'The following internal_id was received: {internal_id}')
             return str(internal_id)
-        elif response.status_code == 404:
-            logger.error('Device does not exist.')
-            return make_response(jsonify({"message": "Device with that identifier and type does not exist."}),404)
         else:
             logger.warning('Response from request: ' + str(response.text))
             logger.warning('Got response with status_code: ' + str(response.status_code))
