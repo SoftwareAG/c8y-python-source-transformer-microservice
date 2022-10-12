@@ -37,7 +37,7 @@ logger.debug('Alarms resources added')
 def health():
     return '{ "status" : "UP" }'
 
-"""# Get environment details
+# Get environment details
 @app.route('/environment')
 def environment():
     environment_data = {
@@ -48,7 +48,7 @@ def environment():
         'password': os.getenv('C8Y_BOOTSTRAP_PASSWORD'),
         'microserviceIsolation': os.getenv('C8Y_MICROSERVICE_ISOLATION')
     }
-    return jsonify(environment_data)"""
+    return jsonify(environment_data)
 
 if __name__ == '__main__':
     logger.info("Starting")

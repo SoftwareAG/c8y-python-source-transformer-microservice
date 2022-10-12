@@ -23,8 +23,11 @@ class Measurements(BaseRequest):
         try:
             payload = super().post()
             print(type(payload))
-            statusCode,responseText = create_measurement(payload)
-            make_response(jsonify({"message": str(responseText)}),statusCode)
+            if type(payload) == 'Response':
+                return payload
+            else:
+                statusCode,responseText = create_measurement(payload)
+                make_response(jsonify({"message": str(responseText)}),statusCode)
         except Exception as e:
                 self.logger.error(f'Received the following error: {e}. Can not proceed, returning error message and status_code 500.')
                 return make_response(jsonify({"message": str(e)}),500)
