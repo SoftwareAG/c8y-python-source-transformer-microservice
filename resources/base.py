@@ -45,7 +45,7 @@ class BaseRequest(Resource):
                 return self.payload
         except Exception as e:
             self.logger.error(f'Received the following error: {e}. Can not proceed, returning error message and status_code 500.')
-            return make_response(jsonify({"message": str(e)}),500)
+            return make_response(jsonify({str(e)}),500)
     @log
     def __del__(self):
         pass

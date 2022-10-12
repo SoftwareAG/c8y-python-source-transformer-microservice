@@ -31,7 +31,7 @@ def get_internalId_from_externalId(type,id):
             return make_response(jsonify({"message": str(response.text)}),response.status_code)
     except Exception as e:
         logger.error('The following error occured: %s' % (str(e)))
-        return make_response(jsonify({"message": str(e)}),500)
+        return make_response(jsonify({str(e)}),500)
 
 if __name__ == '__main__':
     pass

@@ -34,7 +34,7 @@ def create_measurement(payload):
         return response.status_code, response.text
     except Exception as e:
         logger.error('The following error occured: %s' % (str(e)))
-        return make_response(jsonify({"message": str(e)}),500)
+        return make_response(jsonify({str(e)}),500)
 
 if __name__ == '__main__':
     pass
