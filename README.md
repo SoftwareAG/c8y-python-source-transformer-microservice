@@ -52,7 +52,7 @@ The microservice consists of 4 modules and a main runtime:
 * `resources/events.py`: Is called when the events endpoint is calles on the service microservices and hand the payload over to 'API/events.py'.
 * `resources/measurements.py`: Is called when the measurements endpoint is calles on the service microservices and hand the payload over to 'API/measurements.py'.
 
-Currently the sheduled request for statistics is set to be 900s which equals 15 minutes. Debug Level is set to be INFO. Feel free to adjust the resolution but keep in mind that a device is created for every subtenant as well as a certain device class is associated with that.
+Debug Level is set to be INFO and can be changed in `main.py`.
 
 # Installation from scratch
 
