@@ -14,10 +14,10 @@ Auth = auth.Authentication()
 
 
 def create_alarm(payload):
-    logger.info('Creating measurements in c8y')
+    logger.info('Creating alarm in c8y')
     try:
         logger.debug(f'Received the following payload for sending: {payload}')
-        url = "%s/measurement/measurements"%(Auth.tenant)
+        url = "%s/alarm/alarms"%(Auth.tenant)
         Auth.headers['Accept'] = 'application/vnd.com.nsn.cumulocity.alarm+json'            
         response = requests.request("POST", url, headers=Auth.headers, data = payload)
         logger.debug('Sending data to the following url: ' + str(url))

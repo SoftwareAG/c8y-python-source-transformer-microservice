@@ -14,7 +14,7 @@ Auth = auth.Authentication()
 
 
 def create_event(payload):
-    logger.info('Creating measurements in c8y')
+    logger.info('Creating event in c8y')
     try:
         logger.debug(f'Received the following payload for sending: {payload}')
         url = "%s/event/events"%(Auth.tenant)
