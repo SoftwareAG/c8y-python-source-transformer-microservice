@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request
 from datetime import datetime, date, time, timedelta
 from base64 import b64encode
 import API.authentication as auth
-
+import json
 from flask import abort, current_app, jsonify, request, make_response
 
 Auth = auth.Authentication()
@@ -19,7 +19,7 @@ def create_alarm(payload):
         logger.debug(f'Received the following payload for sending: {payload}')
         url = "%s/alarm/alarms"%(Auth.tenant)
         Auth.headers['Accept'] = 'application/vnd.com.nsn.cumulocity.alarm+json'            
-        response = requests.request("POST", url, headers=Auth.headers, data = payload)
+        response = requests.request("POST", url, headers=Auth.headers, data = json.dumps(payload))
         logger.debug('Sending data to the following url: ' + str(url))
         logger.debug('Response from request: ' + str(response.text))
         logger.debug('Response from request with code : ' + str(response.status_code))
