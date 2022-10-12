@@ -34,11 +34,11 @@ class BaseRequest(Resource):
                 self.logger.debug("Either id or type are empty, returning 500.")
                 return make_response(jsonify({"message": str("externalId and/or type is missing as parameter")}),500)
             self.source = get_internalId_from_externalId(self.type,self.id)
+            self.logger.debug(type(self.source))
             try:
                 self.logger.debug(f'Checking if source is an response object or an real externalId.')
-                self.text = self.source.text
                 self.status_code = self.source.status_code
-                self.logger.debug(f'Received the following status code {self.status_code} and text {self.text} from {__name__}, returning response object.')
+                self.logger.debug(f'Received the following status code {self.status_code} from {__name__}, returning response object.')
                 return self.source
             except:
                 self.payload["source"] = {"id": self.source}

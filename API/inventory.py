@@ -20,8 +20,8 @@ def get_internalId_from_externalId(type,id):
         logger.debug('Response from request: ' + str(response.text))
         logger.debug('Response from request with code : ' + str(response.status_code))
         if response.status_code == 200 or response.status_code == 201:
-            logger.info('Inventory exists')
-            logger.info(json.loads(response.text))
+            logger.debug('Inventory exists')
+            logger.debug(json.loads(response.text))
             internal_id = json.loads(response.text)['managedObject']['id']
             logger.debug(f'The following internal_id was received: {internal_id}')
             return str(internal_id)

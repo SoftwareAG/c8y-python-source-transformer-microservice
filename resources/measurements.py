@@ -1,7 +1,6 @@
 #from API import measurement
 from resources.base import BaseRequest
 from flask_restful import Api, Resource, reqparse
-from utils.rest import check_body_is_json
 from utils.rest import log
 from flask import jsonify, make_response, request, abort
 from datetime import datetime
@@ -9,7 +8,6 @@ import time
 import logging
 
 from API.measurements import create_measurement
-from API.inventory import get_internalId_from_externalId
 
 class Measurements(BaseRequest):
     logger = logging.getLogger(__name__)
@@ -19,6 +17,7 @@ class Measurements(BaseRequest):
         super().__init__()
         self.url = "/measurement/measurements"
 
+    @log
     def post(self):
         try:
             self.payload = super().post()
