@@ -1,10 +1,10 @@
 {
   "apiVersion": "v1",
-  "version": "2.0.21",
+  "version": "2.0.22",
   "provider": {
     "name": "Cumulocity"
   },
-  "isolation": "MULTI_TENANT",
+  "isolation": "SINGLE",
   "scale": "AUTO",
   "replicas": 1,
   "resources": {
