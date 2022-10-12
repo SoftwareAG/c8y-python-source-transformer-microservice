@@ -21,21 +21,28 @@ class BaseRequest(Resource):
     def post(self):
         try:
             self.logger.debug(f'Received post in base class, extracting payload.')
-            payload = request.get_json(force=True)
-            self.logger.debug(f'The following payload was extracted: {payload}')
+            self.payload = request.get_json(force=True)
+            self.logger.debug(f'The following payload was extracted: {self.payload}')
             # Adding arguments from externailId
             self.logger.debug(f'Extracting the argurments')
-            id=request.args.get('externalId','')
-            self.logger.debug(f'The extracted argument id is: {id}')
-            type=request.args.get('type','')
-            self.logger.debug(f'The extracted argument type is: {type}')
+            self.id=request.args.get('externalId','')
+            self.logger.debug(f'The extracted argument id is: {self.id}')
+            self.type=request.args.get('type','')
+            self.logger.debug(f'The extracted argument type is: {self.type}')
             self.logger.debug("Checking if id and type are both not empty")
-            if not id or not type:
+            if not self.id or not self.type:
                 self.logger.debug("Either id or type are empty, returning 500.")
-                return make_response(jsonify({"message": str("externalId and type is missing as parameter")}),500)
-            source = get_internalId_from_externalId(type,id)
-            payload["source"] = {"id": source}
-            return payload
+                return make_response(jsonify({"message": str("externalId and/or type is missing as parameter")}),500)
+            self.source = get_internalId_from_externalId(self.type,self.id)
+            try:
+                self.logger.debug(f'Checking if source is an response object or an real externalId.')
+                self.text = self.source.text
+                self.status_code = self.source.status_code
+                self.logger.debug(f'Received the following status code {self.status_code} and text {self.text} from {__name__}, returning response object.')
+                return self.source
+            except:
+                self.payload["source"] = {"id": self.source}
+                return self.payload
         except Exception as e:
             self.logger.error(f'Received the following error: {e}. Can not proceed, returning error message and status_code 500.')
             return make_response(jsonify({"message": str(e)}),500)
