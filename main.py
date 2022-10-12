@@ -2,7 +2,7 @@
 import logging
 from pickle import FALSE
 logger = logging.getLogger('Logger')
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger.info("Logger was initialized")
 
 from flask import Flask, jsonify, request
