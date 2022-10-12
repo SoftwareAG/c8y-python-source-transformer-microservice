@@ -22,7 +22,7 @@ class Measurements(BaseRequest):
     def post(self):
         try:
             payload = super().post()
-            print(type(payload))
+            self.logger.debug(type(payload))
             if type(payload) == 'Response':
                 return payload
             else:
